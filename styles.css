@@ -3,11 +3,11 @@
     --bg-color: #0d0d12;
     --text-primary: #ffffff;
     --text-secondary: #a0a0b0;
-    --accent-primary: #6c5ce7;
-    /* Soft Purple */
-    --accent-secondary: #00cec9;
-    /* Teal/Cyan */
-    --accent-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --accent-primary: #f0b429;
+    /* Golden Yellow */
+    --accent-secondary: #fbbf24;
+    /* Amber Yellow */
+    --accent-gradient: linear-gradient(135deg, #e6a817, #f7d070);
     --surface-color: #1a1a24;
     --surface-hover: #252532;
     --border-color: #333344;
@@ -28,8 +28,8 @@
 body {
     background-color: var(--bg-color);
     background-image:
-        radial-gradient(circle at 15% 50%, rgba(108, 92, 231, 0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(0, 206, 201, 0.08), transparent 25%);
+        radial-gradient(circle at 15% 50%, rgba(240, 180, 41, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(251, 191, 36, 0.08), transparent 25%);
     color: var(--text-primary);
     font-family: var(--font-main);
     line-height: 1.6;
@@ -145,7 +145,7 @@ nav a:hover {
 
 .btn-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(108, 92, 231, 0.4);
+    box-shadow: 0 4px 20px rgba(240, 180, 41, 0.4);
 }
 
 .btn-outline {
@@ -162,7 +162,7 @@ nav a:hover {
 }
 
 .btn-outline:hover {
-    background: rgba(108, 92, 231, 0.1);
+    background: rgba(240, 180, 41, 0.1);
 }
 
 /* Hero Section */
@@ -171,7 +171,7 @@ nav a:hover {
     display: flex;
     align-items: center;
     text-align: center;
-    background: radial-gradient(circle at 50% 10%, rgba(108, 92, 231, 0.15), transparent 60%);
+    background: radial-gradient(circle at 50% 10%, rgba(240, 180, 41, 0.15), transparent 60%);
 }
 
 #hero h1 {
@@ -387,7 +387,7 @@ nav a:hover {
 /* CTA Footer */
 #cta {
     text-align: center;
-    background: radial-gradient(circle at 50% 50%, rgba(108, 92, 231, 0.2), transparent 70%);
+    background: radial-gradient(circle at 50% 50%, rgba(240, 180, 41, 0.2), transparent 70%);
 }
 
 footer {
