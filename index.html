@@ -4,271 +4,1062 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 Morning AI Forum</title>
+    <title>Morning AI Forum — 가장 생산적인 아침, 가장 가까운 AI 혁신</title>
+    <meta name="description"
+        content="매월 둘째 주 금요일 오전 7시, 70분. 담론이 아니라 결과물이 쌓이는 AI 실무 커뮤니티. 7개 세션, 정원 20석. 운영: 넥스트코웍.">
+    <meta name="theme-color" content="#07070B">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Morning AI Forum — AI for Problem Solver">
+    <meta property="og:description" content="매월 둘째 주 금요일 오전 7시, 70분. 결과물이 쌓이는 AI 실무 커뮤니티. 정원 20석.">
+    <meta property="og:locale" content="ko_KR">
+
     <link rel="stylesheet" href="styles.css">
 
-    <!-- Google Fonts -->
+    <!-- JS가 꺼져 있어도 모든 콘텐츠가 보이도록 -->
+    <noscript>
+        <style>
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .gap-fill {
+                width: var(--w) !important;
+            }
+
+            .session-body {
+                grid-template-rows: 1fr !important;
+            }
+
+            .session-body-inner {
+                padding: 6px 26px 30px !important;
+                border-top: 1px solid var(--line);
+            }
+
+            .session-toggle,
+            .filter-bar {
+                display: none !important;
+            }
+        </style>
+    </noscript>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
         rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="logo">Morning AI Forum</div>
-            <nav>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    <a href="#sessions" class="skip-link">본문으로 건너뛰기</a>
+
+    <!-- ============ HEADER ============ -->
+    <header id="siteHeader">
+        <div class="container header-inner">
+            <a href="#hero" class="logo" aria-label="Morning AI Forum 홈">
+                <span class="logo-mark">morning</span><span class="logo-paren">(</span><span
+                    class="logo-ai">AI</span><span class="logo-paren">)</span>
+            </a>
+
+            <nav class="site-nav" aria-label="주요 섹션">
                 <ul>
-                    <li><a href="#mission">Mission</a></li>
-                    <li><a href="#programs">Programs</a></li>
-                    <li><a href="#operation">Operation</a></li>
-                    <li><a href="#people">People</a></li>
-                    <li><a href="#archive">Archive</a></li>
+                    <li><a href="#why" data-nav>Why Now</a></li>
+                    <li><a href="#sessions" data-nav>Sessions</a></li>
+                    <li><a href="#runsheet" data-nav>70min</a></li>
+                    <li><a href="#outcome" data-nav>Outcome</a></li>
+                    <li><a href="#members" data-nav>Members</a></li>
+                    <li><a href="#join" data-nav>Join</a></li>
                 </ul>
             </nav>
-            <a href="#cta" class="btn-cta">참여 신청하기</a>
+
+            <div class="header-actions">
+                <span class="header-dday mono" id="headerDday" aria-live="polite"></span>
+                <a href="#apply" class="btn btn-primary btn-sm">멤버 신청</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <div class="mobile-nav" id="mobileNav" hidden>
+            <a href="#why">Why Now</a>
+            <a href="#sessions">Sessions</a>
+            <a href="#runsheet">70분 러닝오더</a>
+            <a href="#outcome">Outcome</a>
+            <a href="#members">Members</a>
+            <a href="#join">Join</a>
+            <a href="#faq">FAQ</a>
+            <a href="#apply" class="mobile-nav-cta">멤버 신청하기</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ============ 01. HERO ============ -->
     <section id="hero">
-        <div class="container fade-in">
-            <h1>가장 생산적인 아침,<br><span class="gradient-text">가장 가까운 AI 혁신</span></h1>
-            <p class="subtitle">AI를 ‘아는 사람’과 ‘업무에 쓰는 사람’의 격차가 벌어지는 전환기.<br>개인 학습이 아닌 검증된 사례 기반의 커뮤니티에서 시작하세요.</p>
-            <div class="hero-actions">
-                <a href="#cta" class="btn-cta">참여 신청하기</a>
-                <a href="#operation" class="btn-outline">일정 보기</a>
-            </div>
-        </div>
-    </section>
+        <div class="hero-horizon" aria-hidden="true"></div>
+        <div class="hero-grid-overlay" aria-hidden="true"></div>
 
-    <!-- Mission & Principles -->
-    <section id="mission">
-        <div class="container">
-            <div class="mission-grid">
-                <div class="mission-text fade-in">
-                    <h2 class="section-title">What Makes Us Different</h2>
-                    <p class="section-desc">대화가 아닌 ‘결과물’을 남기는 포럼. 실무 문제에서 출발해 AI를 적용하고, 그 결과물을 아카이빙합니다.</p>
-                    <div class="card">
-                        <h3>Mission</h3>
-                        <p>실용적인 AI 실무활용술의 반복 학습과 개선. 뜬구름 잡는 담론을 배제하고 오직 "어떻게 쓰는가"에 집중합니다.</p>
-                    </div>
-                </div>
-                <div class="principles-list fade-in">
-                    <div class="card" style="margin-bottom: 24px;">
-                        <h3>Principle 1</h3>
-                        <h4>AI for Problem Solver</h4>
-                        <p>우리는 AI를 공부하기 위해 모이지 않습니다. 문제를 해결하기 위해 AI를 도구로 사용합니다.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Principle 2</h3>
-                        <h4>Workflow-Centric</h4>
-                        <p>단편적인 기능보다 업무 전체의 흐름을 바꾸는 워크플로우를 공유하고 발전시킵니다.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Programs -->
-    <section id="programs">
-        <div class="container">
-            <h2 class="section-title text-center fade-in">Core Programs</h2>
-            <p class="section-desc fade-in">매월 포럼에서 다루는 7대 핵심 주제입니다.</p>
-
-            <div class="programs-grid fade-in">
-                <div class="program-card">
-                    <span class="program-icon">📢</span>
-                    <h4>AI 활용사례 PT & 시연</h4>
-                    <p>실제 업무 적용 성공/실패 사례를 가감 없이 공유합니다.</p>
-                </div>
-                <div class="program-card">
-                    <span class="program-icon">💬</span>
-                    <h4>프롬프트 우수사례</h4>
-                    <p>검증된 고성능 프롬프트 템플릿을 공유하고 해설합니다.</p>
-                </div>
-                <div class="program-card">
-                    <span class="program-icon">📚</span>
-                    <h4>AI 아티클/논문 큐레이션</h4>
-                    <p>쏟아지는 정보 중 필독해야 할 핵심 자료를 엄선합니다.</p>
-                </div>
-                <div class="program-card">
-                    <span class="program-icon">📰</span>
-                    <h4>뉴스 & 트렌드 브리핑</h4>
-                    <p>한 달간의 AI 기술 변화와 시장 동향을 요약 정리합니다.</p>
-                </div>
-                <div class="program-card">
-                    <span class="program-icon">🤖</span>
-                    <h4>AI Agent 제작 실습</h4>
-                    <p>나만의 맞춤형 AI 에이전트를 기획하고 제작해봅니다.</p>
-                </div>
-                <div class="program-card">
-                    <span class="program-icon">⚡</span>
-                    <h4>업무 자동화 구현</h4>
-                    <p>반복 업무를 제거하는 구체적인 자동화 스크립트를 배웁니다.</p>
-                </div>
-                <div class="program-card">
-                    <span class="program-icon">🧠</span>
-                    <h4>Collective Problem Solving</h4>
-                    <p>집단 지성으로 실무 난제에 대한 AI 솔루션을 토론합니다.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Value -->
-    <section id="value">
-        <div class="container">
-            <h2 class="section-title" style="text-align: center;">Participation Value</h2>
-            <p class="section-desc" style="text-align: center; margin-bottom: 60px;">12개월 꾸준한 참여가 당신을 상위 10% AI 활용 인재로
-                만듭니다.</p>
-
-            <div class="value-list fade-in">
-                <div class="value-item">
-                    <h3 class="gradient-text">Practical References</h3>
-                    <p>즉시 활용 가능한<br>실무 레퍼런스 확보</p>
-                </div>
-                <div class="value-item">
-                    <h3 class="gradient-text">Personal Assets</h3>
-                    <p>나만의 프롬프트·에이전트<br>워크플로우 자산화</p>
-                </div>
-                <div class="value-item">
-                    <h3 class="gradient-text">Professional Network</h3>
-                    <p>지역 기반의<br>검증된 전문가 네트워크</p>
-                </div>
-                <div class="value-item">
-                    <h3 class="gradient-text">Communication</h3>
-                    <p>복잡한 기술을 설명하는<br>발표 및 전달 역량 강화</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Operation -->
-    <section id="operation">
-        <div class="container">
-            <h2 class="section-title">How It Works</h2>
-            <div class="operation-details fade-in">
-                <div class="info-box">
-                    <div class="icon">📅</div>
-                    <h3>When</h3>
-                    <p>매월 둘째 주 금요일</p>
-                    <p class="gradient-text" style="font-weight: 700; font-size: 1.2rem;">오전 7:00 ~ 8:10</p>
-                </div>
-                <div class="info-box">
-                    <div class="icon">🎤</div>
-                    <h3>Format</h3>
-                    <p>2인 이상 사례 발표</p>
-                    <p>Q&A 및 자유 토론</p>
-                </div>
-                <div class="info-box">
-                    <div class="icon">📝</div>
-                    <h3>Platform</h3>
-                    <p>Google Workspace</p>
-                    <p>Notion 아카이빙</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- People -->
-    <section id="people">
-        <div class="container">
-            <h2 class="section-title">Who We Are</h2>
-            <p class="section-desc">지역에서 가장 AI를 잘 활용하는 사람들의 연결 고리입니다.</p>
-
-            <div class="people-grid fade-in">
-                <div class="person">
-                    <div class="avatar">👑</div>
-                    <h4>운영진 A</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary);">초기 설립 멤버</p>
-                </div>
-                <div class="person">
-                    <div class="avatar">🎓</div>
-                    <h4>전문가 B</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary);">연구/학계 파트너</p>
-                </div>
-                <div class="person">
-                    <div class="avatar">🏢</div>
-                    <h4>실무자 C</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary);">산업계 리더</p>
-                </div>
-                <div class="person">
-                    <div class="avatar">🚀</div>
-                    <h4>당신</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Next Member</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Archive -->
-    <section id="archive">
-        <div class="container">
-            <h2 class="section-title fade-in">Knowledge Archive</h2>
-            <p class="section-desc fade-in">"기록하면 남는다" — 우리의 철학은 웹에서도 계속됩니다.</p>
-
-            <div class="archive-grid fade-in">
-                <div class="archive-item">
-                    <div class="archive-preview" style="background: linear-gradient(45deg, #2d3436, #000);">
-                        <span style="font-size: 3rem;">📊</span>
-                    </div>
-                    <div class="archive-info">
-                        <h4>발표 자료 (Slides)</h4>
-                        <p>매회 발표되는 고퀄리티 발표자료 PDF 아카이빙</p>
-                    </div>
-                </div>
-                <div class="archive-item">
-                    <div class="archive-preview" style="background: linear-gradient(45deg, #e6a817, #f7d070);">
-                        <span style="font-size: 3rem;">🃏</span>
-                    </div>
-                    <div class="archive-info">
-                        <h4>프롬프트 카드 (Prompts)</h4>
-                        <p>검증된 프롬프트 템플릿 라이브러리</p>
-                    </div>
-                </div>
-                <div class="archive-item">
-                    <div class="archive-preview" style="background: linear-gradient(45deg, #f0b429, #fbbf24);">
-                        <span style="font-size: 3rem;">🤖</span>
-                    </div>
-                    <div class="archive-info">
-                        <h4>에이전트 스냅샷 (Agents)</h4>
-                        <p>실습 결과물로 완성된 에이전트 설정값</p>
-                    </div>
-                </div>
+        <div class="container hero-inner">
+            <div class="hero-badge reveal">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="mono" id="nextSessionLabel">NEXT SESSION</span>
+                <span class="hero-badge-divider" aria-hidden="true"></span>
+                <span class="mono hero-badge-dday" id="heroDday">D-</span>
             </div>
 
-            <div style="text-align: center; margin-top: 40px;" class="fade-in">
-                <a href="#" class="btn-outline" style="font-size: 0.9rem;">멤버 전용 아카이브 입장 (Coming Soon)</a>
-            </div>
-        </div>
-    </section>
+            <h1 class="hero-title reveal">
+                가장 생산적인 아침,<br>
+                <span class="dawn-text">가장 가까운 AI 혁신</span>
+            </h1>
 
-    <!-- CTA & Footer -->
-    <section id="cta">
-        <div class="container fade-in">
-            <h2 class="section-title">Join the 2026 Morning AI Forum</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 32px; color: var(--text-secondary);">AI 시대에 먼저 움직일 사람으로 합류하세요.
+            <p class="hero-sub reveal">
+                AI를 <strong>‘아는 사람’</strong>과 <strong>‘쓰는 사람’</strong>의 격차가 본격적으로 벌어지는 2026년.<br>
+                모닝AI포럼은 담론이 아니라 <strong>결과물</strong>이 쌓이는 AI 실무 커뮤니티입니다.
             </p>
-            <form style="max-width: 500px; margin: 0 auto; display: flex; gap: 10px;">
-                <input type="email" placeholder="이메일 주소를 입력하세요"
-                    style="flex: 1; padding: 16px; border-radius: 50px; border: none; outline: none;">
-                <button type="submit" class="btn-cta">신청하기</button>
+
+            <div class="hero-actions reveal">
+                <a href="#apply" class="btn btn-primary btn-lg">2026 멤버 신청하기</a>
+                <a href="#sessions" class="btn btn-ghost btn-lg">7개 세션 먼저 보기</a>
+            </div>
+
+            <dl class="hero-facts reveal">
+                <div class="fact">
+                    <dt class="mono">WHEN</dt>
+                    <dd>매월 둘째 주 금요일</dd>
+                </div>
+                <div class="fact">
+                    <dt class="mono">TIME</dt>
+                    <dd>07:00 – 08:10 <span class="fact-sub">70분</span></dd>
+                </div>
+                <div class="fact">
+                    <dt class="mono">SESSIONS</dt>
+                    <dd><span class="count" data-count-to="7">0</span>개 코어 세션</dd>
+                </div>
+                <div class="fact">
+                    <dt class="mono">SEATS</dt>
+                    <dd><span class="count" data-count-to="20">0</span>석 한정</dd>
+                </div>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ============ 02. TICKER ============ -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <span>AI&nbsp;FOR&nbsp;PROBLEM&nbsp;SOLVER<i>◆</i>AGENT&nbsp;BUILDER<i>◆</i>AUTOMATION&nbsp;BUILDER<i>◆</i>PROMPT&nbsp;BUILDER<i>◆</i>기록하면&nbsp;남는다<i>◆</i></span>
+            <span>AI&nbsp;FOR&nbsp;PROBLEM&nbsp;SOLVER<i>◆</i>AGENT&nbsp;BUILDER<i>◆</i>AUTOMATION&nbsp;BUILDER<i>◆</i>PROMPT&nbsp;BUILDER<i>◆</i>기록하면&nbsp;남는다<i>◆</i></span>
+        </div>
+    </div>
+
+    <!-- ============ 03. WHY NOW ============ -->
+    <section id="why" class="section">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">01 / WHY NOW</p>
+                <h2 class="section-title">왜 지금, AI 커뮤니티인가</h2>
+                <p class="section-desc">
+                    2026년은 AI를 실제 업무에 활용하는 사람과 그렇지 못한 사람의 격차가<br class="br-pc">
+                    본격적으로 벌어지는 전환점입니다.
+                </p>
+            </header>
+
+            <div class="why-grid">
+                <article class="why-card reveal">
+                    <span class="why-num mono">01</span>
+                    <h3>전환점은 이미 지났다</h3>
+                    <p>Agentic AI, AI 자동화, Multi-Agent, MCP. 기술은 이미 업무 현장에 도착했습니다. 남은 질문은 “언제 쓸까”가 아니라 “누가 먼저 썼나”입니다.</p>
+                    <ul class="chip-row">
+                        <li>Agentic AI</li>
+                        <li>Multi-Agent</li>
+                        <li>MCP</li>
+                    </ul>
+                </article>
+
+                <article class="why-card reveal">
+                    <span class="why-num mono">02</span>
+                    <h3>툴은 충분하다, 활용법이 없을 뿐</h3>
+                    <p>AI 툴은 이미 차고 넘칩니다. 핵심은 <strong>“AI를 어떻게 잘 쓰느냐”</strong>입니다. 업무 워크플로우 재구성, 프롬프트 최적화, 에이전트 제작이 실제 실력입니다.</p>
+                    <ul class="chip-row">
+                        <li>Workflow 재구성</li>
+                        <li>Prompt Wiki</li>
+                        <li>Agent 제작</li>
+                    </ul>
+                </article>
+
+                <article class="why-card reveal">
+                    <span class="why-num mono">03</span>
+                    <h3>개인 학습만으로는 비효율적이다</h3>
+                    <p>검증된 사례와 인사이트를 공유하고, 생생한 피드백이 오가는 학습 커뮤니티가 가장 빠릅니다. 우리의 목표는 <strong>가장 AI를 잘 활용하는 도시</strong>입니다.</p>
+                    <ul class="chip-row">
+                        <li>검증된 사례</li>
+                        <li>즉각 피드백</li>
+                        <li>지역 네트워크</li>
+                    </ul>
+                </article>
+            </div>
+
+            <figure class="gap-chart reveal">
+                <figcaption>
+                    <h3>12개월 뒤, 두 사람의 격차</h3>
+                    <p class="mono">GAP OVER 12 MONTHS</p>
+                </figcaption>
+                <div class="gap-bars">
+                    <div class="gap-row">
+                        <span class="gap-label">포럼 참여자</span>
+                        <div class="gap-bar"><span class="gap-fill gap-fill--on" style="--w:92%"></span></div>
+                        <span class="gap-val mono">상위 10%</span>
+                    </div>
+                    <div class="gap-row">
+                        <span class="gap-label">개인 학습자</span>
+                        <div class="gap-bar"><span class="gap-fill gap-fill--off" style="--w:34%"></span></div>
+                        <span class="gap-val mono">현상 유지</span>
+                    </div>
+                </div>
+                <p class="gap-note">“AI의 아침은 조용히 시작되지만, 그 격차는 시간이 갈수록 벌어질 것입니다.”</p>
+            </figure>
+        </div>
+    </section>
+
+    <!-- ============ 04. IDENTITY ============ -->
+    <section id="identity" class="section section--alt">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">02 / IDENTITY</p>
+                <h2 class="section-title">AI for <span class="dawn-text">Problem Solver</span></h2>
+                <p class="section-desc">우리는 AI를 공부하려고 모이지 않습니다. 문제를 풀려고 AI를 씁니다.</p>
+            </header>
+
+            <div class="builder-row reveal">
+                <div class="builder"><span class="mono">01</span>AI Agent Builder</div>
+                <span class="builder-plus" aria-hidden="true">+</span>
+                <div class="builder"><span class="mono">02</span>Automation Builder</div>
+                <span class="builder-plus" aria-hidden="true">+</span>
+                <div class="builder"><span class="mono">03</span>Prompt Builder</div>
+            </div>
+
+            <div class="identity-grid">
+                <article class="identity-card reveal">
+                    <p class="eyebrow mono">CONCEPT</p>
+                    <h3>AI 실무활용 연구실이자,<br>결과물이 쌓이는 AI 부트캠프</h3>
+                    <p>매월 참여자 각자가 AI 콘텐츠의 소비자가 아닌 <strong>공급자</strong>가 되도록 설계했습니다.</p>
+                </article>
+                <article class="identity-card reveal">
+                    <p class="eyebrow mono">FEATURE</p>
+                    <h3>모든 활동은<br>업무 문제 해결에서 출발</h3>
+                    <p>실질적이고 구체적인 <strong>AI의 쓸모</strong>를 만듭니다. 내 책상 위 문제가 곧 세션 주제입니다.</p>
+                </article>
+                <article class="identity-card reveal">
+                    <p class="eyebrow mono">DIFFERENCE</p>
+                    <h3>뜬구름 잡는 담론이 아닌,<br>오늘 쓸 수 있는 툴 중심</h3>
+                    <p>인간지능 + 인공지능. 노코드·바이브코딩·에이전트로 <strong>총합지능</strong>을 증강합니다.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 05. SESSIONS ============ -->
+    <section id="sessions" class="section">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">03 / CORE SESSIONS</p>
+                <h2 class="section-title">7개 세션, 매번 결과물 하나</h2>
+                <p class="section-desc">
+                    “무엇을 배우나”가 아니라 <strong>“무엇을 들고 나가나”</strong>로 설계했습니다.<br class="br-pc">
+                    관심 태그를 눌러 내게 필요한 세션부터 확인하세요.
+                </p>
+            </header>
+
+            <div class="filter-bar reveal" role="group" aria-label="세션 태그 필터">
+                <button class="filter-chip is-active" data-filter="all">전체 <span class="mono">7</span></button>
+                <button class="filter-chip" data-filter="case">#CASE</button>
+                <button class="filter-chip" data-filter="workflow">#WORKFLOW</button>
+                <button class="filter-chip" data-filter="agent">#AGENT</button>
+                <button class="filter-chip" data-filter="archive">#ARCHIVE</button>
+                <button class="filter-chip" data-filter="discover">#DISCOVER</button>
+                <button class="filter-chip" data-filter="solving">#SOLVING</button>
+            </div>
+
+            <div class="session-list" id="sessionList">
+
+                <!-- S1 -->
+                <article class="session" data-tags="case explore archive">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">01</span>
+                        <span class="session-headline">
+                            <h3>AI 활용사례 PT / 시연 발표</h3>
+                            <p class="session-quote">“배우면서 가르쳐라 — 발표와 공유로 지식 정착률 90%”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#CASE</i><i>#EXPLORE</i><i>#ARCHIVE</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>현업에서 검증된 ‘진짜 써먹힌’ 사례 공유</li>
+                                    <li>단순 소개를 넘어선 라이브 시연 진행</li>
+                                    <li>문제정의 → 도구 → 프롬프트 → 워크플로우 전 과정 공개</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>“내 업무에 적용 가능한 레퍼런스”가 필요한 분</li>
+                                    <li>실제 작동 방식과 성과를 눈으로 확인하고 싶은 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">PT / PDF 또는 노션 정리본</p>
+                                <p class="sb-sub">핵심 흐름 + 관련 링크 + 템플릿 포함</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">재현 가능한 시나리오 &amp; 적용 포인트 도출</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- S2 -->
+                <article class="session" data-tags="workflow explore archive">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">02</span>
+                        <span class="session-headline">
+                            <h3>프롬프트 우수사례 공유</h3>
+                            <p class="session-quote">“같은 AI, 다른 결과 — 프롬프트가 만드는 차이”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#WORKFLOW</i><i>#EXPLORE</i><i>#ARCHIVE</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>‘감’이 아닌 ‘패턴’으로 접근하는 프롬프트 엔지니어링</li>
+                                    <li>잘 뽑히는 문장 구조와 맥락(Context) 주입 노하우</li>
+                                    <li>출력 품질을 안정화하는 실무 운영 팁과 가드레일</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>매번 AI 결과가 들쭉날쭉해서 고민인 분</li>
+                                    <li>팀 차원의 프롬프트 표준을 만들고 싶은 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">Prompt 카드 + 사용 예시 + 변형 가이드</p>
+                                <p class="sb-sub">실무에 바로 복사해 쓸 수 있는 템플릿</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">나만의 프롬프트 자산 &amp; 효율 극대화</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- S3 -->
+                <article class="session" data-tags="archive discover">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">03</span>
+                        <span class="session-headline">
+                            <h3>AI 책 / 논문 / 아티클 소개</h3>
+                            <p class="session-quote">“하나의 글에서 시작되는 새로운 관점”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#ARCHIVE</i><i>#BOOK</i><i>#DISCOVER</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>양질의 AI 도서를 통한 깊은 통찰, 읽기 훈련</li>
+                                    <li>독후감 PT, 노션 요약 등으로 인사이트 공유</li>
+                                    <li>읽을 시간이 없는 분들을 위한 ‘10분 압축’ 써머리</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>체계적으로 AI 실무 지식과 역량을 쌓고 싶은 분</li>
+                                    <li>시간은 없지만 핵심 트렌드와 인사이트는 필요한 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">독후감 또는 요약 PT</p>
+                                <p class="sb-sub">핵심 요지 + 실천 리스트 포함</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">시간 절약 &amp; 관점 확장, 즉시 실행 가능한 To-do 확보</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- S4 -->
+                <article class="session" data-tags="discover archive explore">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">04</span>
+                        <span class="session-headline">
+                            <h3>AI 뉴스 / 트렌드 브리핑</h3>
+                            <p class="session-quote">“놓치면 뒤처지는 AI 세상 — 5분 브리핑으로 따라잡기”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#DISCOVER</i><i>#ARCHIVE</i><i>#EXPLORE</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>이번 달 꼭 봐야 할 핵심 변화만 선별하여 제공</li>
+                                    <li>단순 뉴스 나열이 아닌 실무 / 사업 관점의 시사점 분석</li>
+                                    <li>잠재적 리스크 체크 및 업무별 적용 힌트 제공</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>정보는 넘치는데 의사결정에 쓸 관점이 필요한 분</li>
+                                    <li>바쁜 업무 속에서 효율적으로 트렌드를 업데이트하고 싶은 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">AI 링크 큐레이션 + 한 줄 인사이트</p>
+                                <p class="sb-sub">다음 액션 제안이 포함된 노션 페이지 제공</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">트렌드 압축 습득 &amp; 정보 경쟁력 유지</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- S5 -->
+                <article class="session" data-tags="agent workflow">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">05</span>
+                        <span class="session-headline">
+                            <h3>AI Agent 제작 실습</h3>
+                            <p class="session-quote">“실습 없는 학습은 없다 — 24시간 내 적용, 기억률 75%”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#AGENT</i><i>#WORKFLOW</i><i>#IDEATE</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>눈으로 구경하는 것이 아닌, 내 손으로 직접 완성하는 실습</li>
+                                    <li>도구 연결(MCP), 바이브코딩 등 최신 기술 적용</li>
+                                    <li>반복 업무를 대신 수행하는 에이전트 설계 및 구현</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>커스텀 GPT / 에이전트 / 봇을 실제 업무에 도입하고 싶은 분</li>
+                                    <li>단순 반복 업무를 자동화하여 시간을 확보하고 싶은 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">나만의 AI 에이전트 프로토타입</p>
+                                <p class="sb-sub">GPTs / App / Chatbot 중 1개 + 사용 가이드</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">에이전트 설계법 &amp; 기술 내재화</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- S6 -->
+                <article class="session" data-tags="workflow">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">06</span>
+                        <span class="session-headline">
+                            <h3>AI 활용 업무자동화 구현</h3>
+                            <p class="session-quote">“반복 업무는 AI에게, 창의적 일은 나에게”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#WORKFLOW</i><i>#AUTOMATION</i><i>#PIPELINE</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>자동화 ROI 판단과 체계적인 업무 분해</li>
+                                    <li>데이터 · 승인 · 예외처리를 포함한 실전 프레임워크</li>
+                                    <li>Human-in-the-Loop 설계를 통한 운영 안정성 확보</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>개인 자동화를 넘어 팀 / 조직 효율을 만들고 싶은 분</li>
+                                    <li>반복적인 비효율 업무를 시스템으로 해결하고 싶은 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">Workflow 패키지</p>
+                                <p class="sb-sub">프로세스 맵 + 프롬프트 + 체크리스트 + 템플릿</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">하루 30분 절감(연 180시간) &amp; 운영 안정성</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- S7 -->
+                <article class="session" data-tags="solving agent">
+                    <button class="session-head" aria-expanded="false">
+                        <span class="session-num mono">07</span>
+                        <span class="session-headline">
+                            <h3>AI for Problem Solver</h3>
+                            <p class="session-quote">“참가자들의 경험과 AI를 결합한 집단지성 해결책”</p>
+                        </span>
+                        <span class="session-meta">
+                            <span class="session-tags">
+                                <i>#SOLVING</i><i>#PROBLEM</i><i>#AGENT</i>
+                            </span>
+                            <span class="session-toggle" aria-hidden="true"></span>
+                        </span>
+                    </button>
+                    <div class="session-body">
+                        <div class="session-body-inner">
+                            <div class="sb-col">
+                                <p class="sb-label mono">세션 특징</p>
+                                <ul>
+                                    <li>각자의 현안을 가져와 집단지성으로 해결책 공동 설계</li>
+                                    <li>참가자들의 경험 + 다양한 AI 도구의 결합</li>
+                                    <li>혼자 고민할 때보다 훨씬 빠르고 현실적인 답 도출</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col">
+                                <p class="sb-label mono">이런 분께 추천</p>
+                                <ul>
+                                    <li>현재 막혀 있는 과제가 있어 빠른 돌파구가 필요한 분</li>
+                                    <li>혼자가 아닌 동료들의 피드백으로 문제를 풀고 싶은 분</li>
+                                </ul>
+                            </div>
+                            <div class="sb-col sb-col--out">
+                                <p class="sb-label mono">핵심 결과물</p>
+                                <p class="sb-out">AI Agent / 프롬프트 / 업무안 중 1개 이상</p>
+                                <p class="sb-sub">+ 동료들의 피드백 코칭</p>
+                                <p class="sb-label mono mt">기대 효과</p>
+                                <p class="sb-effect">문제정의 리프레이밍 &amp; 실행 계획</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <p class="session-foot reveal">
+                세션 종료 후에는 <strong>자유로운 티타임(Networking &amp; Feedback)</strong>이 이어집니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ 06. RUNSHEET ============ -->
+    <section id="runsheet" class="section section--alt">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">04 / RUN SHEET</p>
+                <h2 class="section-title">70분, 이렇게 흘러갑니다</h2>
+                <p class="section-desc">출근 전 70분. 한 번의 세션에서 최소 한 개의 결과물이 나오도록 설계된 러닝오더입니다.</p>
+            </header>
+
+            <ol class="timeline reveal">
+                <li class="tl-item">
+                    <span class="tl-time mono">07:00</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>오프닝 &amp; 체크인</h3>
+                        <p>지난달 적용 결과 한 줄 공유. <span class="tl-dur mono">5분</span></p>
+                    </div>
+                </li>
+                <li class="tl-item">
+                    <span class="tl-time mono">07:05</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>AI 뉴스 / 트렌드 브리핑</h3>
+                        <p>이번 달 꼭 봐야 할 변화만 압축. <span class="tl-dur mono">5분</span></p>
+                    </div>
+                </li>
+                <li class="tl-item tl-item--key">
+                    <span class="tl-time mono">07:10</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>사례 발표 #1 — PT / 라이브 시연</h3>
+                        <p>문제정의부터 워크플로우까지 전 과정 공개. <span class="tl-dur mono">20분</span></p>
+                    </div>
+                </li>
+                <li class="tl-item tl-item--key">
+                    <span class="tl-time mono">07:30</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>사례 발표 #2 — 프롬프트 / 에이전트 / 자동화</h3>
+                        <p>매월 2인 이상 발표 원칙. <span class="tl-dur mono">20분</span></p>
+                    </div>
+                </li>
+                <li class="tl-item">
+                    <span class="tl-time mono">07:50</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>AI for Problem Solver — 집단지성 세션</h3>
+                        <p>막힌 과제를 꺼내고 함께 해결책을 설계. <span class="tl-dur mono">15분</span></p>
+                    </div>
+                </li>
+                <li class="tl-item">
+                    <span class="tl-time mono">08:05</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>클로징 &amp; 다음 달 발표자 확정</h3>
+                        <p>결과물 아카이빙 링크 공유. <span class="tl-dur mono">5분</span></p>
+                    </div>
+                </li>
+                <li class="tl-item tl-item--after">
+                    <span class="tl-time mono">08:10</span>
+                    <span class="tl-dot" aria-hidden="true"></span>
+                    <div class="tl-body">
+                        <h3>Networking &amp; Feedback</h3>
+                        <p>자유 티타임 (선택 참여)</p>
+                    </div>
+                </li>
+            </ol>
+
+            <div class="ops-row reveal">
+                <div class="ops-card">
+                    <p class="eyebrow mono">FORMAT</p>
+                    <p>매월 <strong>2인 이상</strong> 사례 발표 &amp; 발제 + 의견 교환</p>
+                </div>
+                <div class="ops-card">
+                    <p class="eyebrow mono">RECORD</p>
+                    <p>Notion / Google Workspace 기반 <strong>즉시 아카이빙</strong></p>
+                </div>
+                <div class="ops-card">
+                    <p class="eyebrow mono">RULE</p>
+                    <p>참석자 전원 <strong>발표자료 공유</strong>가 기본 원칙</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 07. OUTCOME ============ -->
+    <section id="outcome" class="section">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">05 / OUTCOME</p>
+                <h2 class="section-title">12개월 뒤, 당신에게 남는 것</h2>
+                <p class="section-desc">“꾸준함이 전문성이다.” 12개월 꾸준한 참여 = 상위 10% AI 활용 역량.</p>
+            </header>
+
+            <div class="stat-row reveal">
+                <div class="stat">
+                    <p class="stat-num dawn-text"><span class="count" data-count-to="90">0</span>%</p>
+                    <p class="stat-label">발표·공유 시 지식 정착률</p>
+                </div>
+                <div class="stat">
+                    <p class="stat-num dawn-text"><span class="count" data-count-to="75">0</span>%</p>
+                    <p class="stat-label">24시간 내 적용 시 기억률</p>
+                </div>
+                <div class="stat">
+                    <p class="stat-num dawn-text"><span class="count" data-count-to="180">0</span>h</p>
+                    <p class="stat-label">업무자동화 연간 절감 시간</p>
+                </div>
+                <div class="stat">
+                    <p class="stat-num dawn-text">TOP <span class="count" data-count-to="10">0</span>%</p>
+                    <p class="stat-label">12개월 참여 후 도달 역량</p>
+                </div>
+            </div>
+
+            <div class="table-wrap reveal">
+                <table class="value-table">
+                    <caption class="sr-only">세션별 핵심 가치와 기대 효과</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="mono">#</th>
+                            <th scope="col">세션</th>
+                            <th scope="col">핵심 가치</th>
+                            <th scope="col">기대 효과</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">01</td>
+                            <td>사례 PT / 시연</td>
+                            <td>검증된 실무 적용법과 작동 원리</td>
+                            <td>즉시 활용 가능한 인사이트</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">02</td>
+                            <td>프롬프트 우수사례</td>
+                            <td>효율 극대화 노하우 및 패턴</td>
+                            <td>나만의 프롬프트 자산 구축</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">03</td>
+                            <td>AI 관련 글 소개</td>
+                            <td>깊은 통찰의 압축 전달 (10분)</td>
+                            <td>시간 절약 및 관점 확장</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">04</td>
+                            <td>뉴스 / 트렌드 브리핑</td>
+                            <td>이번 달 핵심 트렌드 큐레이션</td>
+                            <td>정보 경쟁력 유지</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">05</td>
+                            <td>Agent 제작 실습</td>
+                            <td>내 손으로 직접 만드는 경험</td>
+                            <td>AI 기술 내재화</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">06</td>
+                            <td>업무자동화 구현</td>
+                            <td>반복 업무 삭제 및 시간 절약 설계</td>
+                            <td>업무 효율의 획기적 혁신</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">07</td>
+                            <td>Problem Solver</td>
+                            <td>집단지성 활용한 문제 해결</td>
+                            <td>새로운 기회와 솔루션 발견</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="sub-title reveal">쌓이는 자산 3종</h3>
+            <div class="asset-grid reveal">
+                <article class="asset-card">
+                    <span class="asset-icon" aria-hidden="true">🃏</span>
+                    <h4>프롬프트 카드</h4>
+                    <p>실무에 바로 복사해 쓰는 검증된 템플릿 라이브러리</p>
+                    <span class="asset-tag mono">PROMPT LIBRARY</span>
+                </article>
+                <article class="asset-card">
+                    <span class="asset-icon" aria-hidden="true">🤖</span>
+                    <h4>에이전트 스냅샷</h4>
+                    <p>실습으로 완성한 GPTs / App / Chatbot 설정값과 가이드</p>
+                    <span class="asset-tag mono">AGENT SNAPSHOT</span>
+                </article>
+                <article class="asset-card">
+                    <span class="asset-icon" aria-hidden="true">⚡</span>
+                    <h4>워크플로우 패키지</h4>
+                    <p>프로세스 맵 + 프롬프트 + 체크리스트 + 템플릿 세트</p>
+                    <span class="asset-tag mono">WORKFLOW KIT</span>
+                </article>
+            </div>
+
+            <p class="archive-note reveal">
+                <strong>“기록하면 남는다.”</strong> 모든 결과물은 Notion 아카이브에 축적되며, 멤버는 전체 히스토리에 접근할 수 있습니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ 08. MEMBERS ============ -->
+    <section id="members" class="section section--alt">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">06 / MEMBERS</p>
+                <h2 class="section-title">코어 멤버</h2>
+                <p class="section-desc">연구 · 행정 · 산학 · 산업. 서로 다른 현장의 문제를 들고 모입니다.</p>
+            </header>
+
+            <div class="member-grid reveal">
+                <article class="member">
+                    <p class="member-org mono">전북연구원</p>
+                    <h3>이지훈</h3>
+                    <p class="member-role">정책 · 리서치 관점의 AI 적용</p>
+                </article>
+                <article class="member">
+                    <p class="member-org mono">전북특별자치도청</p>
+                    <h3>황원택</h3>
+                    <p class="member-role">공공 행정 업무의 AI 전환</p>
+                </article>
+                <article class="member">
+                    <p class="member-org mono">전북산학융합원</p>
+                    <h3>고경환</h3>
+                    <p class="member-role">산학 협력 · 인재양성 연계</p>
+                </article>
+                <article class="member">
+                    <p class="member-org mono">넥스트코웍 대표</p>
+                    <h3>이종찬</h3>
+                    <p class="member-role">포럼 운영 총괄 · 리슬 AI/AX 전략이사 겸직</p>
+                </article>
+                <article class="member member--open">
+                    <p class="member-org mono">NEXT MEMBER</p>
+                    <h3>당신의 자리</h3>
+                    <p class="member-role">각 분야 전문가 · 얼리어답터 · 프로그래머</p>
+                    <a href="#apply" class="member-cta">자리 신청하기 →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 09. JOIN ============ -->
+    <section id="join" class="section">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">07 / JOIN</p>
+                <h2 class="section-title">합류하는 방법</h2>
+                <p class="section-desc">
+                    아침 7시에 나오는 사람은 아무나가 아닙니다.<br class="br-pc">
+                    문턱을 낮추는 대신, <strong>문턱을 분명하게</strong> 만들었습니다.
+                </p>
+            </header>
+
+            <ol class="funnel reveal">
+                <li class="funnel-step">
+                    <span class="funnel-num mono">STEP 01</span>
+                    <h3>신청서 제출</h3>
+                    <p>관심 세션, 발표 가능 주제, 추천인을 적어주세요. 3분이면 충분합니다.</p>
+                </li>
+                <li class="funnel-arrow" aria-hidden="true">→</li>
+                <li class="funnel-step">
+                    <span class="funnel-num mono">STEP 02</span>
+                    <h3>오리엔테이션 콜</h3>
+                    <p>15분 통화로 현재 업무 과제와 기여 가능 영역을 함께 확인합니다.</p>
+                </li>
+                <li class="funnel-arrow" aria-hidden="true">→</li>
+                <li class="funnel-step">
+                    <span class="funnel-num mono">STEP 03</span>
+                    <h3>게스트 참관 1회</h3>
+                    <p>무료로 한 번 앉아보세요. 분위기와 수준을 직접 확인한 뒤 결정합니다.</p>
+                </li>
+                <li class="funnel-arrow" aria-hidden="true">→</li>
+                <li class="funnel-step funnel-step--final">
+                    <span class="funnel-num mono">STEP 04</span>
+                    <h3>시즌 멤버 등록</h3>
+                    <p>연 2회 이상 발표 약속과 함께 정식 합류. 아카이브 전체가 열립니다.</p>
+                </li>
+            </ol>
+
+            <h3 class="sub-title reveal">멤버 등급</h3>
+            <div class="tier-grid reveal">
+                <article class="tier">
+                    <p class="tier-name mono">CORE BUILDER</p>
+                    <p class="tier-seats">정원 <strong>6</strong>명</p>
+                    <ul>
+                        <li>연 4회 이상 발제 · 세션 리드</li>
+                        <li>아카이브 전체 접근</li>
+                        <li>포럼 운영 의사결정 참여</li>
+                    </ul>
+                </article>
+                <article class="tier tier--featured">
+                    <span class="tier-flag mono">모집 중</span>
+                    <p class="tier-name mono">MEMBER</p>
+                    <p class="tier-seats">정원 <strong>14</strong>명</p>
+                    <ul>
+                        <li>연 2회 이상 사례 발표</li>
+                        <li>아카이브 전체 접근</li>
+                        <li>프라이빗 채널 초대</li>
+                    </ul>
+                </article>
+                <article class="tier">
+                    <p class="tier-name mono">GUEST</p>
+                    <p class="tier-seats">회당 <strong>2</strong>석</p>
+                    <ul>
+                        <li>멤버 추천 시 참관 가능</li>
+                        <li>1회 참관 + 당회 자료 제공</li>
+                        <li>참관 후 멤버 전환 신청</li>
+                    </ul>
+                </article>
+            </div>
+
+            <div class="referral reveal">
+                <div class="referral-text">
+                    <p class="eyebrow mono">REFERRAL</p>
+                    <h3>가장 좋은 멤버는 멤버가 데려옵니다</h3>
+                    <p>코어 멤버 1인당 3명 추천을 기본 원칙으로 운영합니다. 추천으로 합류한 멤버가 첫 발표를 마치면, 추천인에게 다음 시즌 세션 리드 우선권이 주어집니다.</p>
+                </div>
+                <a href="#apply" class="btn btn-primary btn-lg">추천으로 신청하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 10. FAQ ============ -->
+    <section id="faq" class="section section--alt">
+        <div class="container container--narrow">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">08 / FAQ</p>
+                <h2 class="section-title">자주 묻는 질문</h2>
+            </header>
+
+            <div class="faq-list reveal">
+                <details class="faq">
+                    <summary>참가비가 있나요?</summary>
+                    <p>회비는 없습니다. 다만 모든 멤버는 <strong>연 2회 이상 발표</strong>라는 기여 약속을 지켜야 합니다. 돈이 아니라 결과물로 참여하는 커뮤니티입니다.</p>
+                </details>
+                <details class="faq">
+                    <summary>발표가 부담스럽습니다. 꼭 해야 하나요?</summary>
+                    <p>네, 다만 형식은 자유입니다. 20분 사례 발표뿐 아니라 <strong>5분 트렌드 브리핑</strong>, 1페이지 독후감, 프롬프트 카드 1장도 정식 발표로 인정합니다. 각자 편한 방식으로 시작하세요.</p>
+                </details>
+                <details class="faq">
+                    <summary>코딩이나 프로그래밍을 몰라도 되나요?</summary>
+                    <p>됩니다. 노코드 도구, GPTs, 바이브코딩 중심으로 진행합니다. 부족한 부분은 멤버 영입과 그룹 스터디로 함께 채워가는 것이 포럼의 공식 과제 중 하나입니다.</p>
+                </details>
+                <details class="faq">
+                    <summary>아침 7시에 어디로 가면 되나요?</summary>
+                    <p>매월 둘째 주 금요일 오전 7시, 전북 지역 오프라인으로 진행합니다. 정확한 장소와 참여 링크는 신청 후 개별 안내드립니다.</p>
+                </details>
+                <details class="faq">
+                    <summary>한 번 빠지면 자료를 못 보나요?</summary>
+                    <p>아닙니다. 세션 종료 후 24시간 내에 <strong>발표자료와 아카이브 링크</strong>를 전체 멤버에게 발송합니다. 참석하지 못해도 자산은 남습니다.</p>
+                </details>
+                <details class="faq">
+                    <summary>어떤 사람이 오면 좋나요?</summary>
+                    <p>자기 업무에 <strong>구체적인 문제</strong>를 하나 이상 들고 오실 수 있는 분이면 충분합니다. AI 숙련도보다 “풀고 싶은 문제가 있는가”가 유일한 기준입니다.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 11. APPLY ============ -->
+    <section id="apply" class="section">
+        <div class="apply-glow" aria-hidden="true"></div>
+        <div class="container container--narrow">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">09 / APPLY</p>
+                <h2 class="section-title">2026 시즌 멤버 신청</h2>
+                <p class="section-desc">
+                    다음 세션은 <strong id="applyNextDate">매월 둘째 주 금요일 오전 7시</strong>입니다.<br class="br-pc">
+                    남은 자리 <span class="mono seat-left">MEMBER 14석 / GUEST 회당 2석</span>
+                </p>
+            </header>
+
+            <form class="apply-form reveal" id="applyForm" novalidate>
+                <div class="field">
+                    <label for="f-name">이름 <span class="req">*</span></label>
+                    <input id="f-name" name="name" type="text" autocomplete="name" placeholder="홍길동" required>
+                </div>
+                <div class="field">
+                    <label for="f-org">소속 / 직함 <span class="req">*</span></label>
+                    <input id="f-org" name="org" type="text" autocomplete="organization" placeholder="OO기업 / 기획팀장"
+                        required>
+                </div>
+                <div class="field">
+                    <label for="f-email">이메일 <span class="req">*</span></label>
+                    <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@company.com"
+                        required>
+                </div>
+                <div class="field">
+                    <label for="f-tier">신청 유형</label>
+                    <select id="f-tier" name="tier">
+                        <option value="Member">Member — 연 2회 이상 발표</option>
+                        <option value="Core Builder">Core Builder — 연 4회 이상 발제 · 세션 리드</option>
+                        <option value="Guest">Guest — 1회 참관 후 결정</option>
+                    </select>
+                </div>
+
+                <fieldset class="field field--full">
+                    <legend>관심 세션 <span class="field-hint">(복수 선택)</span></legend>
+                    <div class="check-row">
+                        <label class="check"><input type="checkbox" name="interest" value="사례 PT/시연"><span>사례 PT/시연</span></label>
+                        <label class="check"><input type="checkbox" name="interest" value="프롬프트"><span>프롬프트</span></label>
+                        <label class="check"><input type="checkbox" name="interest" value="책/논문/아티클"><span>책·논문·아티클</span></label>
+                        <label class="check"><input type="checkbox" name="interest" value="뉴스/트렌드"><span>뉴스·트렌드</span></label>
+                        <label class="check"><input type="checkbox" name="interest" value="Agent 제작"><span>Agent 제작</span></label>
+                        <label class="check"><input type="checkbox" name="interest" value="업무자동화"><span>업무자동화</span></label>
+                        <label class="check"><input type="checkbox" name="interest" value="Problem Solver"><span>Problem Solver</span></label>
+                    </div>
+                </fieldset>
+
+                <div class="field field--full">
+                    <label for="f-topic">발표 가능 주제 <span class="field-hint">(지금 풀고 싶은 업무 문제도 좋습니다)</span></label>
+                    <textarea id="f-topic" name="topic" rows="3"
+                        placeholder="예: 보고서 초안 작성 자동화 워크플로우 / 고객 문의 분류 에이전트"></textarea>
+                </div>
+
+                <div class="field field--full">
+                    <label for="f-ref">추천인 <span class="field-hint">(있는 경우)</span></label>
+                    <input id="f-ref" name="referrer" type="text" placeholder="추천해주신 멤버 이름">
+                </div>
+
+                <p class="form-error" id="formError" role="alert" hidden></p>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">신청서 보내기</button>
+                <p class="form-note">제출 시 메일 앱으로 신청 내용이 정리되어 열립니다. 문의: <a
+                        href="mailto:contact@nextcw.com">contact@nextcw.com</a></p>
             </form>
-            <p style="margin-top: 24px; font-size: 0.9rem; opacity: 0.7;">* 초기 멤버 모집 중입니다. (문의: contact@morning-ai.com)
-            </p>
+
+            <div class="apply-done" id="applyDone" hidden>
+                <p class="apply-done-icon" aria-hidden="true">✓</p>
+                <h3>신청 내용이 준비되었습니다</h3>
+                <p>메일 앱이 열리지 않았다면 아래 내용을 <strong>contact@nextcw.com</strong>으로 보내주세요.<br>영업일 기준 2일 내 오리엔테이션 콜 일정을
+                    안내드립니다.</p>
+                <pre class="apply-summary mono" id="applySummary"></pre>
+                <button type="button" class="btn btn-ghost" id="applyAgain">다시 작성하기</button>
+            </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <p class="logo">
+                    <span class="logo-mark">morning</span><span class="logo-paren">(</span><span
+                        class="logo-ai">AI</span><span class="logo-paren">)</span>
+                </p>
+                <p class="footer-tag">가장 생산적인 아침, 가장 가까운 AI 혁신</p>
+            </div>
+            <div class="footer-meta">
+                <p><span class="mono">RUN BY</span> 넥스트코웍 (NEXT COWORK) · 이종찬</p>
+                <p><span class="mono">CONTACT</span> <a href="mailto:contact@nextcw.com">contact@nextcw.com</a></p>
+                <p><span class="mono">WEB</span> <a href="https://www.nextcw.com" target="_blank"
+                        rel="noopener">www.nextcw.com</a></p>
+            </div>
+        </div>
+        <div class="container footer-bottom">
             <p>&copy; 2026 Morning AI Forum. All rights reserved.</p>
+            <p class="mono">AI FOR PROBLEM SOLVER</p>
         </div>
     </footer>
+
+    <!-- Sticky mobile CTA -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="mono" id="stickyDday">D-</span>
+        <a href="#apply" class="btn btn-primary btn-sm">멤버 신청</a>
+    </div>
 
     <script src="script.js"></script>
 </body>
