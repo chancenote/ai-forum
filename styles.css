@@ -454,7 +454,7 @@ th {
     padding: 14px !important;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1100px) {
 
     .site-nav,
     .header-actions {
@@ -466,7 +466,7 @@ th {
     }
 }
 
-@media (min-width: 981px) {
+@media (min-width: 1101px) {
     .mobile-nav {
         display: none !important;
     }
@@ -2018,7 +2018,7 @@ th {
     transform: translateY(0);
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1100px) {
     .sticky-cta {
         display: flex;
     }
@@ -2059,4 +2059,580 @@ th {
     .gap-fill {
         width: var(--w);
     }
+}
+
+/* ============================================================
+   LIVE WORKFLOW SIMULATOR
+   Data colors validated for dark surface (OKLCH band 0.48–0.67,
+   chroma >= 0.10, CVD dE 30.5 protan / 26.6 tritan, contrast >= 3:1).
+   Step type is always carried by a text badge, never colour alone.
+   ============================================================ */
+
+:root {
+    --sim-ai: #CF7B00;
+    --sim-ai-ink: #FFC24D;
+    --sim-agent: #0081F6;
+    --sim-agent-ink: #7CBBFF;
+    --sim-human: #8C8C9E;
+    --sim-human-ink: #C3C3D0;
+}
+
+.sim {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(ellipse at 100% 0%, rgba(255, 176, 31, .07), transparent 58%),
+        var(--ink-700);
+    overflow: hidden;
+}
+
+/* --- tabs --- */
+.sim-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 16px 16px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.sim-tab {
+    padding: 12px 18px;
+    border-radius: 10px 10px 0 0;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--fg-dim);
+    border: 1px solid transparent;
+    border-bottom: none;
+    margin-bottom: -1px;
+    transition: color .2s, background .2s, border-color .2s;
+    white-space: nowrap;
+}
+
+.sim-tab:hover {
+    color: var(--fg);
+    background: rgba(255, 255, 255, .04);
+}
+
+.sim-tab.is-active {
+    color: var(--amber);
+    background: var(--ink-600);
+    border-color: var(--line);
+    border-bottom: 1px solid var(--ink-600);
+}
+
+.sim-panel {
+    padding: clamp(22px, 3.4vw, 36px);
+}
+
+.sim-panel:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: -4px;
+}
+
+/* --- track --- */
+.sim-track+.sim-track {
+    margin-top: 0;
+}
+
+.sim-track-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.sim-track-name {
+    color: var(--fg-mute);
+    font-size: .7rem;
+}
+
+.sim-track--after .sim-track-name {
+    color: var(--amber);
+}
+
+.sim-track-total {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--fg-dim);
+    letter-spacing: -.02em;
+}
+
+.sim-track--after .sim-track-total {
+    color: var(--fg);
+}
+
+/* --- nodes --- */
+.sim-nodes {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 26px;
+}
+
+.sim-node {
+    position: relative;
+    padding: 16px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--ink-800);
+    cursor: default;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: simIn .42s var(--ease) forwards;
+    animation-delay: var(--sd, 0ms);
+    transition: border-color .2s, background .2s, transform .2s;
+}
+
+.sim-node:hover,
+.sim-node:focus-visible {
+    border-color: var(--line-strong);
+    background: var(--ink-600);
+    transform: translateY(-3px);
+}
+
+@keyframes simIn {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* connector */
+.sim-node:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -26px;
+    width: 26px;
+    height: 1px;
+    background: var(--line-strong);
+}
+
+.sim-node:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -9px;
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid var(--line-strong);
+    border-right: 1px solid var(--line-strong);
+    transform: translateY(-50%) rotate(45deg);
+}
+
+/* flowing pulse on the automated track */
+.sim-nodes--after .sim-node:not(:last-child)::after {
+    background:
+        linear-gradient(90deg, var(--amber), var(--amber)) no-repeat,
+        var(--line-strong);
+    background-size: 30% 100%;
+    animation: simFlow 2.4s linear infinite;
+    animation-delay: var(--sd, 0ms);
+}
+
+@keyframes simFlow {
+    from {
+        background-position: -40% 0;
+    }
+
+    to {
+        background-position: 140% 0;
+    }
+}
+
+.sim-node-kind {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    letter-spacing: .06em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+    border: 1px solid;
+}
+
+.sim-node[data-kind="manual"] .sim-node-kind,
+.sim-node[data-kind="human"] .sim-node-kind {
+    color: var(--sim-human-ink);
+    border-color: rgba(140, 140, 158, .5);
+    background: rgba(140, 140, 158, .12);
+}
+
+.sim-node[data-kind="ai"] .sim-node-kind {
+    color: var(--sim-ai-ink);
+    border-color: rgba(207, 123, 0, .6);
+    background: rgba(207, 123, 0, .16);
+}
+
+.sim-node[data-kind="agent"] .sim-node-kind {
+    color: var(--sim-agent-ink);
+    border-color: rgba(0, 129, 246, .55);
+    background: rgba(0, 129, 246, .16);
+}
+
+.sim-node[data-kind="ai"] {
+    border-color: rgba(207, 123, 0, .32);
+}
+
+.sim-node[data-kind="agent"] {
+    border-color: rgba(0, 129, 246, .3);
+}
+
+.sim-node-label {
+    display: block;
+    font-size: .93rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 6px;
+}
+
+.sim-node-min {
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    color: var(--fg-mute);
+}
+
+.sim-node[data-kind="ai"] .sim-node-min,
+.sim-node[data-kind="agent"] .sim-node-min {
+    color: var(--amber);
+}
+
+/* --- transition arrow between tracks --- */
+.sim-arrow-down {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 26px 0;
+    color: var(--amber);
+}
+
+.sim-arrow-down::before,
+.sim-arrow-down::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 176, 31, .4), transparent);
+}
+
+.sim-arrow-down .mono {
+    font-size: .66rem;
+}
+
+/* --- legend --- */
+.sim-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 18px;
+    font-size: .82rem;
+    color: var(--fg-dim);
+}
+
+.sim-legend li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.sim-key {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.sim-key--human {
+    background: var(--sim-human);
+}
+
+.sim-key--ai {
+    background: var(--sim-ai);
+}
+
+.sim-key--agent {
+    background: var(--sim-agent);
+}
+
+/* --- detail strip --- */
+.sim-detail {
+    margin-top: 24px;
+    padding: 15px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--ink-900);
+    color: var(--fg-dim);
+    font-size: .89rem;
+    min-height: 54px;
+}
+
+.sim-detail strong {
+    color: var(--amber-2);
+    font-weight: 600;
+}
+
+/* --- meter --- */
+.sim-meter {
+    margin-top: 28px;
+    display: grid;
+    gap: 12px;
+}
+
+.sim-meter-row {
+    display: grid;
+    grid-template-columns: 108px 1fr 70px;
+    align-items: center;
+    gap: 14px;
+}
+
+.sim-meter-label {
+    font-size: .85rem;
+    color: var(--fg-dim);
+}
+
+.sim-meter-bar {
+    height: 14px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, .045);
+    overflow: hidden;
+}
+
+.sim-meter-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 0 4px 4px 0;
+    transition: width .9s var(--ease);
+}
+
+.sim-meter-fill--before {
+    background: #4A4A5C;
+}
+
+.sim-meter-fill--after {
+    background: var(--dawn-soft);
+}
+
+.sim-meter-val {
+    text-align: right;
+    font-size: .78rem;
+    color: var(--fg-dim);
+}
+
+.sim-meter-row:last-child .sim-meter-val {
+    color: var(--amber);
+    font-weight: 700;
+}
+
+/* --- stats --- */
+.sim-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1px;
+    margin-top: 28px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.sim-stat {
+    background: var(--ink-800);
+    padding: 20px 22px;
+}
+
+.sim-stat--key {
+    background: rgba(255, 176, 31, .07);
+}
+
+.sim-stat dt {
+    font-size: .8rem;
+    color: var(--fg-dim);
+    margin-bottom: 8px;
+}
+
+.sim-freq {
+    color: var(--fg-mute);
+    font-size: .74rem;
+}
+
+.sim-stat dd {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.sim-stat dd strong {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.9rem;
+    letter-spacing: -.04em;
+    line-height: 1;
+}
+
+.sim-stat--key dd strong {
+    background: var(--dawn);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sim-unit {
+    font-size: .88rem;
+    color: var(--fg-dim);
+}
+
+/* --- foot --- */
+.sim-foot {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+}
+
+.sim-related {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.sim-related .mono {
+    color: var(--fg-mute);
+}
+
+.sim-related a {
+    font-size: .8rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 176, 31, .3);
+    color: var(--amber-2);
+    transition: background .2s;
+}
+
+.sim-related a:hover {
+    background: rgba(255, 176, 31, .12);
+}
+
+.sim-disclaimer {
+    font-size: .8rem;
+    color: var(--fg-mute);
+}
+
+.sim-disclaimer strong {
+    color: var(--fg-dim);
+    font-weight: 600;
+}
+
+/* --- responsive: stack the diagram vertically --- */
+@media (max-width: 900px) {
+
+    /* tabs scroll sideways instead of wrapping to three rows */
+    .sim-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .sim-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sim-nodes {
+        grid-auto-flow: row;
+        grid-auto-columns: auto;
+        gap: 18px;
+    }
+
+    /* compact one-line nodes so the stacked diagram stays scannable */
+    .sim-node {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 11px;
+        padding: 12px 14px;
+    }
+
+    .sim-node-kind {
+        margin-bottom: 0;
+    }
+
+    .sim-node-label {
+        margin-bottom: 0;
+        font-size: .88rem;
+    }
+
+    .sim-node-min {
+        text-align: right;
+    }
+
+    .sim-node:not(:last-child)::after {
+        top: auto;
+        bottom: -18px;
+        right: auto;
+        left: 26px;
+        width: 1px;
+        height: 18px;
+    }
+
+    .sim-nodes--after .sim-node:not(:last-child)::after {
+        background-size: 100% 30%;
+        animation-name: simFlowV;
+    }
+
+    @keyframes simFlowV {
+        from {
+            background-position: 0 -40%;
+        }
+
+        to {
+            background-position: 0 140%;
+        }
+    }
+
+    .sim-node:not(:last-child)::before {
+        top: auto;
+        bottom: -5px;
+        right: auto;
+        left: 23px;
+        transform: rotate(135deg);
+    }
+
+    .sim-tab {
+        font-size: .85rem;
+        padding: 11px 14px;
+    }
+
+    .sim-meter-row {
+        grid-template-columns: 92px 1fr 62px;
+        gap: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sim-node {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+
+    .sim-nodes--after .sim-node:not(:last-child)::after {
+        animation: none;
+        background: var(--line-strong);
+    }
+}
+
+/* simulator: static fallback, shown only when JS is unavailable */
+.sim-noscript {
+    display: none;
+    padding: clamp(22px, 3.4vw, 32px);
+    color: var(--fg-dim);
+    font-size: .95rem;
+}
+
+.sim-noscript strong {
+    color: var(--amber-2);
+    font-weight: 600;
 }

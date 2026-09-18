@@ -38,8 +38,14 @@
             }
 
             .session-toggle,
-            .filter-bar {
+            .filter-bar,
+            .sim-tabs,
+            .sim-panel {
                 display: none !important;
+            }
+
+            .sim-noscript {
+                display: block !important;
             }
         </style>
     </noscript>
@@ -70,6 +76,7 @@
             <nav class="site-nav" aria-label="주요 섹션">
                 <ul>
                     <li><a href="#why" data-nav>Why Now</a></li>
+                    <li><a href="#simulator" data-nav>Workflow</a></li>
                     <li><a href="#sessions" data-nav>Sessions</a></li>
                     <li><a href="#runsheet" data-nav>70min</a></li>
                     <li><a href="#outcome" data-nav>Outcome</a></li>
@@ -90,6 +97,7 @@
 
         <div class="mobile-nav" id="mobileNav" hidden>
             <a href="#why">Why Now</a>
+            <a href="#simulator">라이브 워크플로우</a>
             <a href="#sessions">Sessions</a>
             <a href="#runsheet">70분 러닝오더</a>
             <a href="#outcome">Outcome</a>
@@ -263,11 +271,125 @@
         </div>
     </section>
 
-    <!-- ============ 05. SESSIONS ============ -->
+    <!-- ============ 03. LIVE WORKFLOW SIMULATOR ============ -->
+    <section id="simulator" class="section">
+        <div class="container">
+            <header class="section-head reveal">
+                <p class="eyebrow mono">03 / LIVE WORKFLOW</p>
+                <h2 class="section-title">당신의 업무는 <span class="dawn-text">이렇게 바뀝니다</span></h2>
+                <p class="section-desc">
+                    업무를 고르면 워크플로우가 실시간으로 다시 그려집니다.<br class="br-pc">
+                    포럼에서 매월 다루는 것이 정확히 이 <strong>전환 설계</strong>입니다.
+                </p>
+            </header>
+
+            <div class="sim reveal">
+
+                <div class="sim-tabs" role="tablist" aria-label="업무 유형 선택">
+                    <button class="sim-tab is-active" role="tab" id="simtab-report"
+                        aria-controls="simpanel" aria-selected="true" data-job="report">주간 보고서 작성</button>
+                    <button class="sim-tab" role="tab" id="simtab-cs" aria-controls="simpanel"
+                        aria-selected="false" tabindex="-1" data-job="cs">고객 문의 응대</button>
+                    <button class="sim-tab" role="tab" id="simtab-research" aria-controls="simpanel"
+                        aria-selected="false" tabindex="-1" data-job="research">시장·경쟁사 리서치</button>
+                    <button class="sim-tab" role="tab" id="simtab-minutes" aria-controls="simpanel"
+                        aria-selected="false" tabindex="-1" data-job="minutes">회의록 정리·액션 추출</button>
+                </div>
+
+                <p class="sim-noscript">
+                    이 다이어그램은 JavaScript로 동작합니다. 예시로 <strong>주간 보고서 작성</strong>은
+                    지금의 방식 <strong>2시간 50분</strong> → AI 워크플로우 <strong>31분</strong>으로 재구성되며,
+                    1회당 139분(82%)을 줄여 연간 약 120시간을 되찾습니다. (주 1회 기준 추정치)
+                </p>
+
+                <div class="sim-panel" id="simpanel" role="tabpanel" aria-labelledby="simtab-report" tabindex="0">
+
+                    <!-- BEFORE track -->
+                    <div class="sim-track">
+                        <div class="sim-track-head">
+                            <span class="sim-track-name mono">BEFORE · 지금의 방식</span>
+                            <span class="sim-track-total" id="simBeforeTotal">—</span>
+                        </div>
+                        <ol class="sim-nodes sim-nodes--before" id="simBefore"></ol>
+                    </div>
+
+                    <div class="sim-arrow-down" aria-hidden="true">
+                        <span class="mono">AI WORKFLOW 전환</span>
+                    </div>
+
+                    <!-- AFTER track -->
+                    <div class="sim-track sim-track--after">
+                        <div class="sim-track-head">
+                            <span class="sim-track-name mono">AFTER · AI 워크플로우</span>
+                            <span class="sim-track-total" id="simAfterTotal">—</span>
+                        </div>
+                        <ol class="sim-nodes sim-nodes--after" id="simAfter"></ol>
+                        <ul class="sim-legend" aria-label="단계 유형">
+                            <li><span class="sim-key sim-key--human" aria-hidden="true"></span>사람의 판단</li>
+                            <li><span class="sim-key sim-key--ai" aria-hidden="true"></span>AI 생성·요약</li>
+                            <li><span class="sim-key sim-key--agent" aria-hidden="true"></span>에이전트 자동 실행</li>
+                        </ul>
+                    </div>
+
+                    <!-- Detail strip -->
+                    <p class="sim-detail" id="simDetail" aria-live="polite">
+                        각 단계에 마우스를 올리거나 키보드로 이동하면 설명이 표시됩니다.
+                    </p>
+
+                    <!-- Comparison meter -->
+                    <figure class="sim-meter">
+                        <figcaption class="sr-only">업무 1회당 소요 시간 비교</figcaption>
+                        <div class="sim-meter-row">
+                            <span class="sim-meter-label">지금의 방식</span>
+                            <div class="sim-meter-bar">
+                                <span class="sim-meter-fill sim-meter-fill--before" id="simBarBefore"></span>
+                            </div>
+                            <span class="sim-meter-val mono" id="simValBefore">—</span>
+                        </div>
+                        <div class="sim-meter-row">
+                            <span class="sim-meter-label">AI 워크플로우</span>
+                            <div class="sim-meter-bar">
+                                <span class="sim-meter-fill sim-meter-fill--after" id="simBarAfter"></span>
+                            </div>
+                            <span class="sim-meter-val mono" id="simValAfter">—</span>
+                        </div>
+                    </figure>
+
+                    <!-- Live stats -->
+                    <dl class="sim-stats" aria-live="polite">
+                        <div class="sim-stat">
+                            <dt>업무 1회당 절감</dt>
+                            <dd><strong id="simSaveMin">—</strong><span class="sim-unit">분</span></dd>
+                        </div>
+                        <div class="sim-stat">
+                            <dt>소요 시간 감소율</dt>
+                            <dd><strong id="simSavePct">—</strong><span class="sim-unit">%</span></dd>
+                        </div>
+                        <div class="sim-stat sim-stat--key">
+                            <dt>연간 환산 <span id="simFreq" class="sim-freq"></span></dt>
+                            <dd><strong id="simSaveYear">—</strong><span class="sim-unit">시간</span></dd>
+                        </div>
+                    </dl>
+
+                    <div class="sim-foot">
+                        <p class="sim-related">
+                            <span class="mono">관련 세션</span>
+                            <span id="simSessions"></span>
+                        </p>
+                        <p class="sim-disclaimer">
+                            * 실제 측정치가 아니라 <strong>예시 시나리오 기준 추정치</strong>입니다. 본인 업무의 실제 소요 시간은 첫 세션에서 함께 분해합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 06. SESSIONS ============ -->
     <section id="sessions" class="section">
         <div class="container">
             <header class="section-head reveal">
-                <p class="eyebrow mono">03 / CORE SESSIONS</p>
+                <p class="eyebrow mono">04 / CORE SESSIONS</p>
                 <h2 class="section-title">7개 세션, 매번 결과물 하나</h2>
                 <p class="section-desc">
                     “무엇을 배우나”가 아니라 <strong>“무엇을 들고 나가나”</strong>로 설계했습니다.<br class="br-pc">
@@ -596,11 +718,11 @@
         </div>
     </section>
 
-    <!-- ============ 06. RUNSHEET ============ -->
+    <!-- ============ 07. RUNSHEET ============ -->
     <section id="runsheet" class="section section--alt">
         <div class="container">
             <header class="section-head reveal">
-                <p class="eyebrow mono">04 / RUN SHEET</p>
+                <p class="eyebrow mono">05 / RUN SHEET</p>
                 <h2 class="section-title">70분, 이렇게 흘러갑니다</h2>
                 <p class="section-desc">출근 전 70분. 한 번의 세션에서 최소 한 개의 결과물이 나오도록 설계된 러닝오더입니다.</p>
             </header>
@@ -681,11 +803,11 @@
         </div>
     </section>
 
-    <!-- ============ 07. OUTCOME ============ -->
+    <!-- ============ 08. OUTCOME ============ -->
     <section id="outcome" class="section">
         <div class="container">
             <header class="section-head reveal">
-                <p class="eyebrow mono">05 / OUTCOME</p>
+                <p class="eyebrow mono">06 / OUTCOME</p>
                 <h2 class="section-title">12개월 뒤, 당신에게 남는 것</h2>
                 <p class="section-desc">“꾸준함이 전문성이다.” 12개월 꾸준한 참여 = 상위 10% AI 활용 역량.</p>
             </header>
@@ -795,11 +917,11 @@
         </div>
     </section>
 
-    <!-- ============ 08. MEMBERS ============ -->
+    <!-- ============ 09. MEMBERS ============ -->
     <section id="members" class="section section--alt">
         <div class="container">
             <header class="section-head reveal">
-                <p class="eyebrow mono">06 / MEMBERS</p>
+                <p class="eyebrow mono">07 / MEMBERS</p>
                 <h2 class="section-title">코어 멤버</h2>
                 <p class="section-desc">연구 · 행정 · 산학 · 산업. 서로 다른 현장의 문제를 들고 모입니다.</p>
             </header>
@@ -835,11 +957,11 @@
         </div>
     </section>
 
-    <!-- ============ 09. JOIN ============ -->
+    <!-- ============ 10. JOIN ============ -->
     <section id="join" class="section">
         <div class="container">
             <header class="section-head reveal">
-                <p class="eyebrow mono">07 / JOIN</p>
+                <p class="eyebrow mono">08 / JOIN</p>
                 <h2 class="section-title">합류하는 방법</h2>
                 <p class="section-desc">
                     아침 7시에 나오는 사람은 아무나가 아닙니다.<br class="br-pc">
@@ -916,11 +1038,11 @@
         </div>
     </section>
 
-    <!-- ============ 10. FAQ ============ -->
+    <!-- ============ 11. FAQ ============ -->
     <section id="faq" class="section section--alt">
         <div class="container container--narrow">
             <header class="section-head reveal">
-                <p class="eyebrow mono">08 / FAQ</p>
+                <p class="eyebrow mono">09 / FAQ</p>
                 <h2 class="section-title">자주 묻는 질문</h2>
             </header>
 
@@ -953,12 +1075,12 @@
         </div>
     </section>
 
-    <!-- ============ 11. APPLY ============ -->
+    <!-- ============ 12. APPLY ============ -->
     <section id="apply" class="section">
         <div class="apply-glow" aria-hidden="true"></div>
         <div class="container container--narrow">
             <header class="section-head reveal">
-                <p class="eyebrow mono">09 / APPLY</p>
+                <p class="eyebrow mono">10 / APPLY</p>
                 <h2 class="section-title">2026 시즌 멤버 신청</h2>
                 <p class="section-desc">
                     다음 세션은 <strong id="applyNextDate">매월 둘째 주 금요일 오전 7시</strong>입니다.<br class="br-pc">
