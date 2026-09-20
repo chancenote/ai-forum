@@ -6,11 +6,28 @@
 (function () {
     'use strict';
 
-    /* --- 신청 데이터 수신처. Google Form/Formspree 연결 시 여기만 교체 --- */
-    var FORM_ENDPOINT = '';           // 예: 'https://formspree.io/f/xxxx'
-    var CONTACT_EMAIL = 'contact@nextcw.com';
+    /* --- 운영 설정은 config.js 에서 읽는다. 없거나 깨져도 기본값으로 동작한다 --- */
+    var C = window.MAF_CONFIG || {};
+    var CONTACT_EMAIL = C.contactEmail || 'contact@nextcw.com';
+    var FORM_CFG = C.form || {};
+    var FORM_PROVIDER = FORM_CFG.provider || 'mailto';
+    var FORM_ENDPOINT = FORM_CFG.endpoint || '';
 
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ========== 0. 이벤트 측정 ==========
+       설치된 분석 도구를 자동 감지한다. 없으면 조용히 아무것도 하지 않는다. */
+    function track(name, props) {
+        if (C.analytics && C.analytics.enabled === false) return;
+        try {
+            if (typeof window.gtag === 'function') window.gtag('event', name, props || {});
+            if (typeof window.va === 'function') window.va('event', { name: name, data: props || {} });
+            if (typeof window.plausible === 'function') window.plausible(name, { props: props || {} });
+            if (window.dataLayer && typeof window.dataLayer.push === 'function') {
+                window.dataLayer.push(Object.assign({ event: name }, props || {}));
+            }
+        } catch (err) { /* 측정 실패가 사이트 동작을 막지 않는다 */ }
+    }
 
     /* ========== 1. 다음 세션 계산 (매월 둘째 주 금요일 07:00) ========== */
     function secondFriday(year, month) {
@@ -30,7 +47,15 @@
 
     function renderSessionDate() {
         var now = new Date();
-        var next = nextSession(now);
+        var next;
+        var ov = C.nextSessionOverride;
+        if (ov && /^\d{4}-\d{2}-\d{2}$/.test(ov)) {
+            var parts = ov.split('-');
+            next = new Date(+parts[0], +parts[1] - 1, +parts[2], 7, 0, 0, 0);
+            if (isNaN(next.getTime())) next = nextSession(now);
+        } else {
+            next = nextSession(now);
+        }
 
         var y = next.getFullYear();
         var m = String(next.getMonth() + 1).padStart(2, '0');
@@ -42,17 +67,23 @@
         var days = Math.round((target - today) / msPerDay);
         var dday = days === 0 ? 'D-DAY' : 'D-' + days;
 
+        var DOW = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
         var label = document.getElementById('nextSessionLabel');
-        if (label) label.textContent = 'NEXT SESSION · ' + y + '.' + m + '.' + d + ' (FRI) 07:00';
+        if (label) {
+            label.textContent = 'NEXT SESSION · ' + y + '.' + m + '.' + d +
+                ' (' + DOW[next.getDay()] + ') 07:00';
+        }
 
         ['heroDday', 'headerDday', 'stickyDday'].forEach(function (id) {
             var el = document.getElementById(id);
             if (el) el.textContent = dday;
         });
 
+        var KDOW = ['일', '월', '화', '수', '목', '금', '토'];
         var applyDate = document.getElementById('applyNextDate');
         if (applyDate) {
-            applyDate.textContent = y + '년 ' + (next.getMonth() + 1) + '월 ' + next.getDate() + '일(금) 오전 7시';
+            applyDate.textContent = y + '년 ' + (next.getMonth() + 1) + '월 ' + next.getDate() +
+                '일(' + KDOW[next.getDay()] + ') 오전 7시';
         }
     }
 
@@ -215,12 +246,16 @@
         });
     });
 
-    /* ========== 9. 신청 폼 ========== */
+    /* ========== 9. 신청 폼 ==========
+       provider 에 따라 실제 전송을 하고, 성공/실패를 정직하게 표시한다.
+       전송이 실패하면 성공 화면을 보여주지 않고 메일 대안을 제시한다.      */
     var form = document.getElementById('applyForm');
     var done = document.getElementById('applyDone');
     var summaryEl = document.getElementById('applySummary');
     var errorEl = document.getElementById('formError');
     var againBtn = document.getElementById('applyAgain');
+    var submitBtn = document.getElementById('applySubmit');
+    var applyStarted = false;
 
     function showError(msg, field) {
         if (!errorEl) return;
@@ -231,13 +266,120 @@
 
     function clearError() {
         if (errorEl) { errorEl.hidden = true; errorEl.textContent = ''; }
-        form.querySelectorAll('.has-error').forEach(function (el) { el.classList.remove('has-error'); });
+        Array.prototype.forEach.call(form.querySelectorAll('.has-error'), function (el) {
+            el.classList.remove('has-error');
+        });
+    }
+
+    function setBusy(busy) {
+        if (!submitBtn) return;
+        submitBtn.disabled = busy;
+        submitBtn.textContent = busy ? '보내는 중…' : '신청서 보내기';
+    }
+
+    function buildBody(d) {
+        return [
+            '[Morning AI Forum 2026 멤버 신청]',
+            '',
+            '이름      : ' + d.name,
+            '소속/직함 : ' + d.org,
+            '이메일    : ' + d.email,
+            '신청 유형 : ' + d.tier,
+            '관심 세션 : ' + d.interest,
+            '추천인    : ' + d.referrer,
+            '',
+            '발표 가능 주제 / 풀고 싶은 문제',
+            '----------------------------------------',
+            d.topic
+        ].join('\n');
+    }
+
+    function openMailto(d) {
+        var subject = '[모닝AI포럼] 멤버 신청 - ' + d.name + ' (' + d.org + ')';
+        window.location.href = 'mailto:' + CONTACT_EMAIL +
+            '?subject=' + encodeURIComponent(subject) +
+            '&body=' + encodeURIComponent(buildBody(d));
+    }
+
+    /* 구글폼은 CORS 응답을 읽을 수 없으므로 숨은 iframe 으로 POST 한다. */
+    function submitGoogleForm(d) {
+        return new Promise(function (resolve, reject) {
+            var map = FORM_CFG.googleFormFields || {};
+            var filled = Object.keys(map).filter(function (k) { return map[k]; });
+            if (!FORM_ENDPOINT || !filled.length) {
+                return reject(new Error('구글폼 설정이 비어 있습니다.'));
+            }
+            var frameName = 'maf-gf-' + Date.now();
+            var iframe = document.createElement('iframe');
+            iframe.name = frameName;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            var f = document.createElement('form');
+            f.action = FORM_ENDPOINT;
+            f.method = 'POST';
+            f.target = frameName;
+            f.style.display = 'none';
+            filled.forEach(function (k) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = map[k];
+                input.value = d[k] == null ? '' : String(d[k]);
+                f.appendChild(input);
+            });
+            document.body.appendChild(f);
+
+            var settled = false;
+            function finish(ok, err) {
+                if (settled) return;
+                settled = true;
+                setTimeout(function () {
+                    if (f.parentNode) f.parentNode.removeChild(f);
+                    if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                }, 0);
+                ok ? resolve() : reject(err);
+            }
+            iframe.addEventListener('load', function () { finish(true); });
+            setTimeout(function () { finish(false, new Error('전송 시간이 초과되었습니다.')); }, 12000);
+            f.submit();
+        });
+    }
+
+    function submitJson(d) {
+        if (!FORM_ENDPOINT) return Promise.reject(new Error('수신 주소가 설정되지 않았습니다.'));
+        return fetch(FORM_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(d)
+        }).then(function (res) {
+            if (!res.ok) throw new Error('서버가 ' + res.status + ' 응답을 보냈습니다.');
+        });
+    }
+
+    function showDone(d) {
+        if (summaryEl) summaryEl.textContent = buildBody(d);
+        if (form) form.hidden = true;
+        if (done) {
+            done.hidden = false;
+            done.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        }
     }
 
     if (form) {
+        // 첫 입력 시점을 한 번만 기록 (폼 시작 → 제출 이탈률 측정용)
+        form.addEventListener('input', function () {
+            if (applyStarted) return;
+            applyStarted = true;
+            track('apply_start', {});
+        }, { once: false });
+
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             clearError();
+
+            // 봇 트랩에 값이 차 있으면 조용히 중단한다
+            var hp = form.elements['website'];
+            if (hp && hp.value) return;
 
             var name = form.elements['name'];
             var org = form.elements['org'];
@@ -263,41 +405,37 @@
                 referrer: form.elements['referrer'].value.trim() || '(없음)'
             };
 
-            var body = [
-                '[Morning AI Forum 2026 멤버 신청]',
-                '',
-                '이름      : ' + data.name,
-                '소속/직함 : ' + data.org,
-                '이메일    : ' + data.email,
-                '신청 유형 : ' + data.tier,
-                '관심 세션 : ' + data.interest,
-                '추천인    : ' + data.referrer,
-                '',
-                '발표 가능 주제 / 풀고 싶은 문제',
-                '----------------------------------------',
-                data.topic
-            ].join('\n');
+            track('apply_submit', { tier: data.tier, referred: data.referrer !== '(없음)' });
 
-            if (summaryEl) summaryEl.textContent = body;
-
-            if (FORM_ENDPOINT) {
-                fetch(FORM_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(data)
-                }).catch(function () { /* 실패해도 아래 안내 화면은 유지 */ });
-            } else {
-                var subject = '[모닝AI포럼] 멤버 신청 - ' + data.name + ' (' + data.org + ')';
-                window.location.href = 'mailto:' + CONTACT_EMAIL +
-                    '?subject=' + encodeURIComponent(subject) +
-                    '&body=' + encodeURIComponent(body);
+            if (FORM_PROVIDER === 'mailto' || !FORM_ENDPOINT) {
+                openMailto(data);
+                showDone(data);
+                track('apply_success', { provider: 'mailto' });
+                return;
             }
 
-            form.hidden = true;
-            if (done) {
-                done.hidden = false;
-                done.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-            }
+            setBusy(true);
+            var sending = FORM_PROVIDER === 'googleForm' ? submitGoogleForm(data) : submitJson(data);
+
+            sending.then(function () {
+                setBusy(false);
+                showDone(data);
+                track('apply_success', { provider: FORM_PROVIDER });
+            }).catch(function (err) {
+                setBusy(false);
+                track('apply_error', { provider: FORM_PROVIDER, message: String(err && err.message) });
+                showError('전송에 실패했습니다 (' + (err && err.message ? err.message : '알 수 없는 오류') +
+                    '). 잠시 후 다시 시도하시거나, 아래 버튼으로 메일로 보내주세요.');
+                var retry = document.createElement('button');
+                retry.type = 'button';
+                retry.className = 'btn btn-ghost btn-sm form-mail-fallback';
+                retry.textContent = '메일로 보내기';
+                retry.addEventListener('click', function () {
+                    openMailto(data);
+                    showDone(data);
+                });
+                if (errorEl && !errorEl.querySelector('.form-mail-fallback')) errorEl.appendChild(retry);
+            });
         });
     }
 
@@ -308,8 +446,102 @@
                 form.hidden = false;
                 form.reset();
                 clearError();
+                setBusy(false);
                 form.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
             }
+        });
+    }
+
+    /* ========== 10. 설정값을 화면에 반영 (정원 / 멤버 사진 / 공개 아카이브) ========== */
+    function renderSeats() {
+        var s = C.seats;
+        if (!s) return;
+        function put(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
+        if (s.core) put('seatCore', '정원 <strong>' + s.core.total + '</strong>명' +
+            (s.core.remaining != null ? ' <span class="seat-rest">· 잔여 ' + s.core.remaining + '</span>' : ''));
+        if (s.member) put('seatMember', '정원 <strong>' + s.member.total + '</strong>명' +
+            (s.member.remaining != null ? ' <span class="seat-rest">· 잔여 ' + s.member.remaining + '</span>' : ''));
+        if (s.guest) put('seatGuest', '회당 <strong>' + s.guest.perSession + '</strong>석');
+
+        var left = document.getElementById('seatLeft');
+        if (left && s.member && s.guest) {
+            var n = s.member.remaining != null ? s.member.remaining : s.member.total;
+            left.textContent = 'MEMBER ' + n + '석 / GUEST 회당 ' + s.guest.perSession + '석';
+        }
+    }
+
+    function renderMemberPhotos() {
+        (C.members || []).forEach(function (m) {
+            if (!m || !m.photo) return;
+            var card = document.querySelector('.member[data-member="' + m.name + '"]');
+            if (!card || card.querySelector('.member-photo')) return;
+            var img = document.createElement('img');
+            img.className = 'member-photo';
+            img.alt = m.name;
+            img.width = 56; img.height = 56;
+            // 사진이 없거나 깨지면 조용히 이니셜 표시로 되돌린다.
+            // 리스너를 src 지정 전에 붙이고, lazy 로딩은 쓰지 않는다
+            // (lazy 면 화면 밖에서는 로드를 시도하지 않아 빈 칸이 남는다)
+            img.addEventListener('error', function () { img.remove(); });
+            img.src = m.photo.indexOf('/') === 0 || /^https?:/.test(m.photo)
+                ? m.photo : 'assets/members/' + m.photo;
+            card.insertBefore(img, card.firstChild);
+        });
+    }
+
+    function renderArchive() {
+        var items = C.archive || [];
+        var wrap = document.getElementById('pubArchive');
+        var list = document.getElementById('pubArchiveList');
+        if (!wrap || !list || !items.length) return;
+
+        items.slice().sort(function (a, b) {
+            return String(b.date || '').localeCompare(String(a.date || ''));
+        }).forEach(function (it) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href = it.url || '#';
+            if (/^https?:/.test(it.url || '')) { a.target = '_blank'; a.rel = 'noopener'; }
+            a.className = 'pub-archive-item';
+
+            var type = document.createElement('span');
+            type.className = 'pub-archive-type mono';
+            type.textContent = it.type || 'ARCHIVE';
+
+            var title = document.createElement('span');
+            title.className = 'pub-archive-title';
+            title.textContent = it.title || '(제목 없음)';
+
+            var date = document.createElement('span');
+            date.className = 'pub-archive-date mono';
+            date.textContent = it.date || '';
+
+            a.appendChild(type); a.appendChild(title); a.appendChild(date);
+            a.addEventListener('click', function () {
+                track('archive_open', { title: it.title, type: it.type });
+            });
+            li.appendChild(a);
+            list.appendChild(li);
+        });
+        wrap.hidden = false;
+    }
+
+    /* ========== 10b. 주요 상호작용 측정 ========== */
+    function wireTracking() {
+        document.querySelectorAll('a[href="#apply"]').forEach(function (a) {
+            a.addEventListener('click', function () {
+                track('cta_click', { from: a.closest('section') ? a.closest('section').id : 'header' });
+            });
+        });
+        document.querySelectorAll('.filter-chip').forEach(function (c) {
+            c.addEventListener('click', function () { track('session_filter', { tag: c.dataset.filter }); });
+        });
+        document.querySelectorAll('.session-head').forEach(function (h) {
+            h.addEventListener('click', function () {
+                if (h.getAttribute('aria-expanded') === 'true') {
+                    track('session_open', { session: h.querySelector('h3').textContent.trim() });
+                }
+            });
         });
     }
 
@@ -507,7 +739,9 @@
             t.tabIndex = on ? 0 : -1;
         });
         document.getElementById('simpanel').setAttribute('aria-labelledby', tab.id);
-        renderJob(tab.getAttribute('data-job'));
+        var job = tab.getAttribute('data-job');
+        track('sim_tab', { job: job });
+        renderJob(job);
     }
 
     if (simTabs.length && simBefore && simAfter) {
@@ -541,7 +775,11 @@
         renderJob('report');
     }
 
-    /* ========== 10. 초기 실행 ========== */
+    /* ========== 12. 초기 실행 ========== */
     renderSessionDate();
+    renderSeats();
+    renderMemberPhotos();
+    renderArchive();
+    wireTracking();
     onScroll();
 })();

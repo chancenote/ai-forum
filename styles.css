@@ -2636,3 +2636,103 @@ th {
     color: var(--amber-2);
     font-weight: 600;
 }
+
+/* ============================================================
+   CONFIG-DRIVEN BITS — honeypot / seats / member photo / archive
+   ============================================================ */
+
+/* 봇 트랩: 화면 밖으로 밀어내되 display:none 은 쓰지 않는다
+   (일부 봇은 display:none 필드를 건너뛴다) */
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.seat-rest {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--amber);
+    letter-spacing: .04em;
+}
+
+.form-mail-fallback {
+    display: inline-flex;
+    margin-top: 10px;
+}
+
+.member-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 14px;
+    border: 1px solid var(--line-strong);
+}
+
+/* 공개 아카이브 */
+.pub-archive {
+    margin-top: clamp(52px, 7vw, 76px);
+}
+
+.pub-archive .sub-title {
+    margin-top: 0;
+}
+
+.pub-archive-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+.pub-archive-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--ink-700);
+    transition: border-color .25s, background .25s, transform .25s var(--ease);
+}
+
+.pub-archive-item:hover {
+    border-color: rgba(255, 176, 31, .32);
+    background: var(--ink-600);
+    transform: translateX(3px);
+}
+
+.pub-archive-type {
+    font-size: .62rem;
+    color: var(--amber);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 176, 31, .3);
+    white-space: nowrap;
+}
+
+.pub-archive-title {
+    font-weight: 600;
+    font-size: .96rem;
+}
+
+.pub-archive-date {
+    font-size: .7rem;
+    color: var(--fg-mute);
+    white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+    .pub-archive-item {
+        grid-template-columns: auto 1fr;
+        row-gap: 8px;
+    }
+
+    .pub-archive-date {
+        grid-column: 2;
+        text-align: left;
+    }
+}
